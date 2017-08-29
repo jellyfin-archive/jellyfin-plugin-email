@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MediaBrowser.Common.Configuration;
 using MediaBrowser.Common.Plugins;
 using MediaBrowser.Controller.Security;
@@ -32,6 +33,12 @@ namespace MediaBrowser.Plugins.SmtpNotifications
                     EmbeddedResourcePath = GetType().Namespace + ".Configuration.config.html"
                 }
             };
+        }
+
+        private Guid _id = new Guid("b9f0c474-e9a8-4292-ae41-eb3c1542f4cd");
+        public override Guid Id
+        {
+            get { return _id; }
         }
 
         /// <summary>

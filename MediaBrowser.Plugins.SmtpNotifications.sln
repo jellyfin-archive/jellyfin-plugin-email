@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaBrowser.Plugins.SmtpNotifications", "MediaBrowser.Plugins.SmtpNotifications\MediaBrowser.Plugins.SmtpNotifications.csproj", "{197CD2D8-A3AB-4C6F-AE0A-F0ECCDF841A2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{197CD2D8-A3AB-4C6F-AE0A-F0ECCDF841A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{197CD2D8-A3AB-4C6F-AE0A-F0ECCDF841A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{197CD2D8-A3AB-4C6F-AE0A-F0ECCDF841A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{197CD2D8-A3AB-4C6F-AE0A-F0ECCDF841A2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2CE3FE72-DE3A-426C-AC4C-415C0506F647}
+	EndGlobalSection
+EndGlobal
