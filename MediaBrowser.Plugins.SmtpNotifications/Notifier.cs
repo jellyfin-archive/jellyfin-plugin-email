@@ -45,36 +45,39 @@ namespace MediaBrowser.Plugins.SmtpNotifications
         }
 
 
-        public Task SendNotification(UserNotification request, CancellationToken cancellationToken)
+        public async Task SendNotification(UserNotification request, CancellationToken cancellationToken)
         {
             var options = GetOptions(request.User);
 
-            var mail = new MailMessage(options.EmailFrom, options.EmailTo)
+            using (var mail = new MailMessage(options.EmailFrom, options.EmailTo)
             {
                 Subject = "Emby: " + request.Name,
                 Body = request.Description
-            };
-
-            var client = new SmtpClient
+            })
             {
-                Host = options.Server,
-                Port = options.Port,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false,
-                Timeout = 20000
-            };
+                using (var client = new SmtpClient
+                {
+                    Host = options.Server,
+                    Port = options.Port,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Timeout = 20000
+                })
+                {
+                    if (options.SSL) client.EnableSsl = true;
 
-            if (options.SSL) client.EnableSsl = true;
+                    _logger.Info("Sending email {0} with subject {1}", options.EmailTo, mail.Subject);
 
-            _logger.Info("Emailing {0} with subject {1}", options.EmailTo, mail.Subject);
+                    if (options.UseCredentials)
+                    {
+                        var pw = string.IsNullOrWhiteSpace(options.Password) ? _encryption.DecryptString(options.PwData) : options.Password;
+                        client.Credentials = new NetworkCredential(options.Username, pw);
+                    }
 
-            if (options.UseCredentials)
-            {
-                var pw = string.IsNullOrWhiteSpace(options.Password) ? _encryption.DecryptString(options.PwData) : options.Password;
-                client.Credentials = new NetworkCredential(options.Username, pw);
+                    await client.SendMailAsync(mail).ConfigureAwait(false);
+                    _logger.Info("Completed sending email {0} with subject {1}", options.EmailTo, mail.Subject);
+                }
             }
-
-            return client.SendMailAsync(mail);
         }
 
         private bool IsValid(SMTPOptions options)
