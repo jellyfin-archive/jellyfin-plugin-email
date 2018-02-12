@@ -47,7 +47,23 @@ namespace MediaBrowser.Plugins.SmtpNotifications
 
         public Task SendNotification(UserNotification request, CancellationToken cancellationToken)
         {
-            return Task.Run(() => this.SendNotificationCore(request, cancellationToken));
+            return Task.Run(() => TrySendNotification(request, cancellationToken));
+        }
+
+        private void TrySendNotification(UserNotification request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                SendNotificationCore(request, cancellationToken);
+            }
+            catch (OperationCanceledException)
+            {
+
+            }
+            catch (Exception ex)
+            {
+                _logger.ErrorException("Error sending email", ex);
+            }
         }
 
         private void SendNotificationCore(UserNotification request, CancellationToken cancellationToken)
