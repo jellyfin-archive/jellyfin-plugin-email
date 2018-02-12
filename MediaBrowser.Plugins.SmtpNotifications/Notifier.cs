@@ -45,14 +45,19 @@ namespace MediaBrowser.Plugins.SmtpNotifications
         }
 
 
-        public async Task SendNotification(UserNotification request, CancellationToken cancellationToken)
+        public Task SendNotification(UserNotification request, CancellationToken cancellationToken)
+        {
+            return Task.Run(() => this.SendNotificationCore(request, cancellationToken));
+        }
+
+        private void SendNotificationCore(UserNotification request, CancellationToken cancellationToken)
         {
             var options = GetOptions(request.User);
 
             using (var mail = new MailMessage(options.EmailFrom, options.EmailTo)
             {
                 Subject = "Emby: " + request.Name,
-                Body = request.Description
+                Body = string.Format("{0}\n\n{1}", request.Name, request.Description)
             })
             {
                 using (var client = new SmtpClient
@@ -74,8 +79,15 @@ namespace MediaBrowser.Plugins.SmtpNotifications
                         client.Credentials = new NetworkCredential(options.Username, pw);
                     }
 
-                    await client.SendMailAsync(mail).ConfigureAwait(false);
-                    _logger.Info("Completed sending email {0} with subject {1}", options.EmailTo, mail.Subject);
+                    try
+                    {
+                        client.Send(mail);
+                        _logger.Info("Completed sending email {0} with subject {1}", options.EmailTo, mail.Subject);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Error("Error sending email: {0} ", ex);
+                    }
                 }
             }
         }
