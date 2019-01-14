@@ -8,12 +8,10 @@
 
   <ItemGroup>
     <None Remove="Configuration\config.html" />
-    <None Remove="thumb.jpg" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Configuration\config.html" />
-    <EmbeddedResource Include="thumb.jpg" />
   </ItemGroup>
 
   <ItemGroup>
