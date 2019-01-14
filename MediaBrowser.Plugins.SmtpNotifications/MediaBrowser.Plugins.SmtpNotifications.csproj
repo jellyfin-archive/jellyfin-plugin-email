@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="mediabrowser.server.core" Version="3.6.0.36-beta" />
+    <PackageReference Include="Jellyfin.Controller" Version="10.0.1" />
   </ItemGroup>
 
 </Project>
