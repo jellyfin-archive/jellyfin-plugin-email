@@ -1,7 +1,7 @@
 ﻿using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Notifications;
 using MediaBrowser.Controller.Security;
-using MediaBrowser.Model.Logging;
+using Microsoft.Extensions.Logging;
 using MediaBrowser.Plugins.SmtpNotifications.Configuration;
 using System;
 using System.Linq;
@@ -62,7 +62,7 @@ namespace MediaBrowser.Plugins.SmtpNotifications
             }
             catch (Exception ex)
             {
-                _logger.ErrorException("Error sending email", ex);
+                _logger.LogError(ex, "Error sending email");
             }
         }
 
@@ -87,7 +87,7 @@ namespace MediaBrowser.Plugins.SmtpNotifications
                 {
                     if (options.SSL) client.EnableSsl = true;
 
-                    _logger.Info("Sending email {0} with subject {1}", options.EmailTo, mail.Subject);
+                    _logger.LogInformation("Sending email {to} with subject {subject}", options.EmailTo, mail.Subject);
 
                     if (options.UseCredentials)
                     {
@@ -98,11 +98,11 @@ namespace MediaBrowser.Plugins.SmtpNotifications
                     try
                     {
                         client.Send(mail);
-                        _logger.Info("Completed sending email {0} with subject {1}", options.EmailTo, mail.Subject);
+                        _logger.LogInformation("Completed sending email {to} with subject {subject}", options.EmailTo, mail.Subject);
                     }
                     catch (Exception ex)
                     {
-                        _logger.Error("Error sending email: {0} ", ex);
+                        _logger.LogError(ex, "Error sending email");
                     }
                 }
             }

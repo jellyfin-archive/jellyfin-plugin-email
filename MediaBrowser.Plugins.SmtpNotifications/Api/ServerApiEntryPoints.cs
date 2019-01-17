@@ -1,7 +1,7 @@
 ﻿using MediaBrowser.Controller.Security;
 using System;
 using System.Threading.Tasks;
-using MediaBrowser.Model.Logging;
+using Microsoft.Extensions.Logging;
 using System.Threading;
 using MediaBrowser.Controller.Notifications;
 using MediaBrowser.Controller.Library;
