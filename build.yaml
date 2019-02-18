@@ -1,0 +1,13 @@
+---
+name: "jellyfin-plugin-emailnotifications"
+guid: "cfa0f7f4-4155-4d71-849b-d6598dc4c5bb"
+version: "1.0.0"
+nicename: "Email Notifications"
+description: "Send SMTP email notifications"
+overview: "Send SMTP email notifications"
+category: "General"
+artifacts:
+  - "MediaBrowser.Plugins.SmtpNotifications.dll"
+build_type: "dotnet"
+dotnet_configuration: "Release"
+dotnet_framework: "netstandard2.0"
