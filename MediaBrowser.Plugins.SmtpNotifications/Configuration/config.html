@@ -5,12 +5,9 @@
 </head>
 <body>
     <div data-role="page" class="page type-interior pluginConfigurationPage smtpConfigurationPage" data-require="emby-select,emby-checkbox,emby-input,emby-button">
-
         <div data-role="content">
             <div class="content-primary">
-
                 <form class="smtpConfigurationForm">
-
                     <div style="height:0; overflow: hidden;"><input type="text" name="fakeusernameremembered" tabindex="-1" /><input type="password" name="fakepasswordremembered" tabindex="-1" /></div>
 
                     <div class="selectContainer">
@@ -73,27 +70,19 @@
                     <div>
                         <button is="emby-button" type="submit" class="raised button-submit block"><span>Save</span></button>
                     </div>
-
                 </form>
             </div>
         </div>
 
         <script type="text/javascript">
-
             (function () {
-
                 var pluginId = "cfa0f7f4-4155-4d71-849b-d6598dc4c5bb";
 
                 function loadUserConfig(page, userId) {
-
                     Dashboard.showLoadingMsg();
-
                     ApiClient.getPluginConfiguration(pluginId).then(function (config) {
-
                         var smtpConfig = config.Options.filter(function (c) {
-
-                            return userId == c.MediaBrowserUserId;
-
+                            return userId == c.UserId;
                         })[0] || { Enabled: false };
 
                         $('#chkEnableSMTP', page).checked(smtpConfig.Enabled).checkboxradio("refresh");
@@ -111,18 +100,14 @@
                 }
 
                 $('.smtpConfigurationPage').on('pageinit', function (event) {
-
                     var page = this;
 
                     $('#selectUser', page).on('change', function () {
-
                         loadUserConfig(page, this.value);
                     });
 
                     $('#testNotification', page).on('click', function (event) {
-
                         Dashboard.showLoadingMsg();
-
                         var onError = function () {
                             require(['alert'], function (alert) {
                                 alert("There was an error sending the test email. Please check your email settings and try again.");
@@ -130,7 +115,6 @@
                         };
 
                         ApiClient.getPluginConfiguration(pluginId).then(function (config) {
-
                             if (!config.Options.length) {
                                 Dashboard.hideLoadingMsg();
                                 require(['alert'], function (alert) {
@@ -139,33 +123,24 @@
                             }
 
                             config.Options.map(function (c) {
-
                                 ApiClient.ajax({
                                     type: "POST",
-                                    url: ApiClient.getUrl("Notification/SMTP/Test/" + c.MediaBrowserUserId)
-
+                                    url: ApiClient.getUrl("Notification/SMTP/Test/" + c.UserId)
                                 }).catch(onError);
                             });
 
                             Dashboard.hideLoadingMsg();
-
                         }, onError);
                     });
 
                     $('.smtpConfigurationForm', page).on('submit', function (e) {
-
                         Dashboard.showLoadingMsg();
-
                         var form = this;
 
                         ApiClient.getPluginConfiguration(pluginId).then(function (config) {
-
                             var userId = $('#selectUser', form).val();
-
                             var smtpConfig = config.Options.filter(function (c) {
-
-                                return userId == c.MediaBrowserUserId;
-
+                                return userId == c.UserId;
                             })[0];
 
                             if (!smtpConfig) {
@@ -173,7 +148,7 @@
                                 config.Options.push(smtpConfig);
                             }
 
-                            smtpConfig.MediaBrowserUserId = userId;
+                            smtpConfig.UserId = userId;
                             smtpConfig.Enabled = $('#chkEnableSMTP', form).checked();
                             smtpConfig.EmailFrom = $('#txtEmailFrom', form).val();
                             smtpConfig.EmailTo = $('#txtEmailTo', form).val();
@@ -191,26 +166,18 @@
                     });
 
                 }).on('pageshow', function (event) {
-
                     Dashboard.showLoadingMsg();
-
                     var page = this;
 
                     ApiClient.getUsers().then(function (users) {
-
                         $('#selectUser', page).html(users.map(function (user) {
-
                             return '<option value="' + user.Id + '">' + user.Name + '</option>';
-
                         })).selectmenu('refresh').trigger('change');
-
                     });
 
                     Dashboard.hideLoadingMsg();
                 });
-
             })();
-
         </script>
     </div>
 </body>
