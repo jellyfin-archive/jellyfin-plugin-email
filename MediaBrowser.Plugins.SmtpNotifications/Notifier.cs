@@ -14,13 +14,11 @@ namespace MediaBrowser.Plugins.SmtpNotifications
 {
     public class Notifier : INotificationService
     {
-        private readonly IEncryptionManager _encryption;
         private readonly ILogger _logger;
         public static Notifier Instance { get; private set; }
 
-        public Notifier(ILogger logger, IEncryptionManager encryption)
+        public Notifier(ILogger logger)
         {
-            _encryption = encryption;
             _logger = logger;
 
             Instance = this;
@@ -36,7 +34,7 @@ namespace MediaBrowser.Plugins.SmtpNotifications
         private SMTPOptions GetOptions(User user)
         {
             return Plugin.Instance.Configuration.Options
-                .FirstOrDefault(i => string.Equals(i.MediaBrowserUserId, user.Id.ToString("N"), StringComparison.OrdinalIgnoreCase));
+                .FirstOrDefault(i => string.Equals(i.UserId, user.Id.ToString("N"), StringComparison.OrdinalIgnoreCase));
         }
 
         public string Name
@@ -55,10 +53,6 @@ namespace MediaBrowser.Plugins.SmtpNotifications
             try
             {
                 SendNotificationCore(request, cancellationToken);
-            }
-            catch (OperationCanceledException)
-            {
-
             }
             catch (Exception ex)
             {
@@ -89,10 +83,13 @@ namespace MediaBrowser.Plugins.SmtpNotifications
 
                     _logger.LogInformation("Sending email {to} with subject {subject}", options.EmailTo, mail.Subject);
 
-                    if (options.UseCredentials)
+                    if (options.UseCredentials && !string.IsNullOrEmpty(options.Username) && !string.IsNullOrEmpty(options.Password))
                     {
-                        var pw = string.IsNullOrWhiteSpace(options.Password) ? _encryption.DecryptString(options.PwData) : options.Password;
-                        client.Credentials = new NetworkCredential(options.Username, pw);
+                        client.Credentials = new NetworkCredential(options.Username, options.Password);
+                    }
+                    else
+                    {
+                        _logger.LogError("Cannot use credentials for email to {user} because the username or password is missing", options.EmailTo);
                     }
 
                     try

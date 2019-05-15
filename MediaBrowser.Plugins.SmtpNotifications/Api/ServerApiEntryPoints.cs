@@ -19,26 +19,23 @@ namespace MediaBrowser.Plugins.SmtpNotifications.Api
     class ServerApiEndpoints : IService
     {
         private readonly IUserManager _userManager;
-        private readonly IEncryptionManager _encryption;
         private readonly ILogger _logger;
 
-        public ServerApiEndpoints(IUserManager userManager, ILogger logger, IEncryptionManager encryption)
+        public ServerApiEndpoints(IUserManager userManager, ILogger logger)
         {
             _userManager = userManager;
             _logger = logger;
-            _encryption = encryption;
         }
 
         public void Post(TestNotification request)
         {
-            var task = new Notifier(_logger, _encryption).SendNotification(new UserNotification
+            var task = new Notifier(_logger).SendNotification(new UserNotification
             {
                 Date = DateTime.UtcNow,
                 Description = "This is a test notification from Emby Server",
                 Level = Model.Notifications.NotificationLevel.Normal,
                 Name = "Emby: Test Notification",
                 User = _userManager.GetUserById(request.UserID)
-
             }, CancellationToken.None);
 
             Task.WaitAll(task);

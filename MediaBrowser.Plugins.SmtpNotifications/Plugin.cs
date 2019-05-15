@@ -16,12 +16,9 @@ namespace MediaBrowser.Plugins.SmtpNotifications
     /// </summary>
     public class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
     {
-        private readonly IEncryptionManager _encryption;
-
-        public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer, IEncryptionManager encryption)
+        public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer)
             : base(applicationPaths, xmlSerializer)
         {
-            _encryption = encryption;
             Instance = this;
         }
 
@@ -60,7 +57,7 @@ namespace MediaBrowser.Plugins.SmtpNotifications
         {
             get
             {
-                return "Sends notifications via email.";
+                return "Send SMTP email notifications";
             }
         }
 

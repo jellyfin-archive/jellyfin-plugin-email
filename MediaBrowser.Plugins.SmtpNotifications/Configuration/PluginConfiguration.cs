@@ -25,8 +25,7 @@ namespace MediaBrowser.Plugins.SmtpNotifications.Configuration
         public bool UseCredentials { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        public string PwData { get; set; }
-        public string MediaBrowserUserId { get; set; }
+        public string UserId { get; set; }
         public bool SSL { get; set; }
 
         public SMTPOptions()
