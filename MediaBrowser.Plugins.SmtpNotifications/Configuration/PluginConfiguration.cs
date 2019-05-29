@@ -1,4 +1,5 @@
-﻿using MediaBrowser.Model.Plugins;
+﻿using System;
+using MediaBrowser.Model.Plugins;
 
 namespace MediaBrowser.Plugins.SmtpNotifications.Configuration
 {
@@ -11,7 +12,7 @@ namespace MediaBrowser.Plugins.SmtpNotifications.Configuration
 
         public PluginConfiguration()
         {
-            Options = new SMTPOptions[] { };
+            Options = Array.Empty<SMTPOptions>();
         }
     }
 

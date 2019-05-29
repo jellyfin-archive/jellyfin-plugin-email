@@ -1,11 +1,10 @@
-﻿using MediaBrowser.Controller.Security;
-using System;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using MediaBrowser.Controller.Notifications;
 using MediaBrowser.Controller.Library;
 using MediaBrowser.Model.Services;
+using Microsoft.Extensions.Logging;
 
 namespace MediaBrowser.Plugins.SmtpNotifications.Api
 {
@@ -16,7 +15,7 @@ namespace MediaBrowser.Plugins.SmtpNotifications.Api
         public string UserID { get; set; }
     }
 
-    class ServerApiEndpoints : IService
+    public class ServerApiEndpoints : IService
     {
         private readonly IUserManager _userManager;
         private readonly ILogger _logger;
@@ -27,18 +26,16 @@ namespace MediaBrowser.Plugins.SmtpNotifications.Api
             _logger = logger;
         }
 
-        public void Post(TestNotification request)
+        public Task Post(TestNotification request)
         {
-            var task = new Notifier(_logger).SendNotification(new UserNotification
+            return new Notifier(_logger).SendNotification(new UserNotification
             {
                 Date = DateTime.UtcNow,
-                Description = "This is a test notification from Emby Server",
+                Description = "This is a test notification from Jellyfin Server",
                 Level = Model.Notifications.NotificationLevel.Normal,
-                Name = "Emby: Test Notification",
+                Name = "Jellyfin: Test Notification",
                 User = _userManager.GetUserById(request.UserID)
             }, CancellationToken.None);
-
-            Task.WaitAll(task);
         }
     }
 }
