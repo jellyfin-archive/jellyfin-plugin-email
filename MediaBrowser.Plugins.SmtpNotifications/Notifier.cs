@@ -39,7 +39,7 @@ namespace MediaBrowser.Plugins.SmtpNotifications
 
             using (var mail = new MailMessage(options.EmailFrom, options.EmailTo)
             {
-                Subject = "Emby: " + request.Name,
+                Subject = "Jellyfin: " + request.Name,
                 Body = string.Format("{0}\n\n{1}", request.Name, request.Description)
             })
             using (var client = new SmtpClient
