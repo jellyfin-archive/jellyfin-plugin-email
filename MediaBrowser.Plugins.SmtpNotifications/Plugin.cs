@@ -13,7 +13,7 @@ namespace MediaBrowser.Plugins.SmtpNotifications
     /// </summary>
     public class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
     {
-        private Guid _id = new Guid("cfa0f7f4-4155-4d71-849b-d6598dc4c5bb");
+        private readonly Guid _id = new Guid("cfa0f7f4-4155-4d71-849b-d6598dc4c5bb");
 
         public Plugin(IApplicationPaths applicationPaths, IXmlSerializer xmlSerializer)
             : base(applicationPaths, xmlSerializer)

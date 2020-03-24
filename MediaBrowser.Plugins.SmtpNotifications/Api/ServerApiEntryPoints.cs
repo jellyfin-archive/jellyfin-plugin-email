@@ -12,7 +12,7 @@ namespace MediaBrowser.Plugins.SmtpNotifications.Api
     public class TestNotification : IReturnVoid
     {
         [ApiMember(Name = "UserID", Description = "User Id", IsRequired = true, DataType = "string", ParameterType = "path", Verb = "POST")]
-        public string UserID { get; set; }
+        public string UserId { get; set; }
     }
 
     public class ServerApiEndpoints : IService
@@ -33,8 +33,8 @@ namespace MediaBrowser.Plugins.SmtpNotifications.Api
                 Date = DateTime.UtcNow,
                 Description = "This is a test notification from Jellyfin Server",
                 Level = Model.Notifications.NotificationLevel.Normal,
-                Name = "Jellyfin: Test Notification",
-                User = _userManager.GetUserById(request.UserID)
+                Name = "Test Notification",
+                User = _userManager.GetUserById(Guid.Parse(request.UserId))
             }, CancellationToken.None);
         }
     }
