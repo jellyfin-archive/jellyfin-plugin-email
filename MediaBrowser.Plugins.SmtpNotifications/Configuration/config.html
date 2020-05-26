@@ -20,13 +20,13 @@
                     <div class="inputContainer">
                         <input is="emby-input" type="text" id="txtEmailFrom" name="txtEmailFrom" required="required" label="Email from:" />
                         <div class="fieldDescription">
-                            Email Address that messages will be sent from. Sending from a free email service such as gmail, hotmail, or yahoo is not recommended. The providers may block repeated outgoing, automated email.
+                            Email address used to send the messages. Sending from a free email service such as gmail, hotmail, or yahoo is not recommended. The providers may block repeated outgoing, automated email.
                         </div>
                     </div>
                     <div class="inputContainer">
                         <input is="emby-input" type="text" id="txtEmailTo" name="txtEmailTo" required="required" label="Email to:" />
                         <div class="fieldDescription">
-                            Email Address that messaged will be sent to.
+                            Email address where messages will be sent.
                         </div>
                     </div>
                     <div class="inputContainer">
@@ -85,13 +85,13 @@
                             return userId == c.UserId;
                         })[0] || { Enabled: false };
 
-                        $('#chkEnableSMTP', page).checked(smtpConfig.Enabled).checkboxradio("refresh");
+                        $('#chkEnableSMTP', page).checked = smtpConfig.Enabled;
                         $('#txtEmailFrom', page).val(smtpConfig.EmailFrom || '');
                         $('#txtEmailTo', page).val(smtpConfig.EmailTo || '');
                         $('#txtServer', page).val(smtpConfig.Server || '');
                         $('#txtPort', page).val(smtpConfig.Port || '');
-                        $('#chkEnableSSL', page).checked(smtpConfig.SSL || false).checkboxradio("refresh");
-                        $('#chkEnableAuth', page).checked(smtpConfig.UseCredentials || false).checkboxradio("refresh");
+                        $('#chkEnableSSL', page).checked = smtpConfig.SSL || false;
+                        $('#chkEnableAuth', page).checked = smtpConfig.UseCredentials || false;
                         $('#txtUsername', page).val(smtpConfig.Username || '');
                         $('#txtPassword', page).val(smtpConfig.Password || '');
 
@@ -101,7 +101,6 @@
 
                 $('.smtpConfigurationPage').on('pageinit', function (event) {
                     var page = this;
-
                     $('#selectUser', page).on('change', function () {
                         loadUserConfig(page, this.value);
                     });
@@ -149,13 +148,13 @@
                             }
 
                             smtpConfig.UserId = userId;
-                            smtpConfig.Enabled = $('#chkEnableSMTP', form).checked();
+                            smtpConfig.Enabled = $('#chkEnableSMTP', form).checked;
                             smtpConfig.EmailFrom = $('#txtEmailFrom', form).val();
                             smtpConfig.EmailTo = $('#txtEmailTo', form).val();
                             smtpConfig.Server = $('#txtServer', form).val();
                             smtpConfig.Port = $('#txtPort', form).val();
-                            smtpConfig.useCredentials = $('#chkEnableAuth', form).checked();
-                            smtpConfig.SSL = $('#chkEnableSSL', form).checked();
+                            smtpConfig.useCredentials = $('#chkEnableAuth', form).checked;
+                            smtpConfig.SSL = $('#chkEnableSSL', form).checked;
                             smtpConfig.Username = $('#txtUsername', form).val();
                             smtpConfig.Password = $('#txtPassword', form).val();
 

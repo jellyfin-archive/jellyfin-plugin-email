@@ -1,10 +1,9 @@
 ---
 name: "jellyfin-plugin-emailnotifications"
 guid: "cfa0f7f4-4155-4d71-849b-d6598dc4c5bb"
-version: "6" # Please increment with each pull request
-jellyfin_version: "10.5.0" # The earliest binary-compatible version
+version: "6"
+targetAbi: "10.5.0"
 owner: "jellyfin"
-nicename: "Email"
 description: "Send SMTP email notifications"
 overview: "Send SMTP email notifications"
 category: "Notifications"
