@@ -85,13 +85,13 @@
                             return userId == c.UserId;
                         })[0] || { Enabled: false };
 
-                        $('#chkEnableSMTP', page).checked = smtpConfig.Enabled;
+                        document.getElementById('chkEnableSMTP').checked = smtpConfig.Enabled;
                         $('#txtEmailFrom', page).val(smtpConfig.EmailFrom || '');
                         $('#txtEmailTo', page).val(smtpConfig.EmailTo || '');
                         $('#txtServer', page).val(smtpConfig.Server || '');
                         $('#txtPort', page).val(smtpConfig.Port || '');
-                        $('#chkEnableSSL', page).checked = smtpConfig.SSL || false;
-                        $('#chkEnableAuth', page).checked = smtpConfig.UseCredentials || false;
+                        document.getElementById('chkEnableSSL').checked = smtpConfig.SSL || false;
+                        document.getElementById('chkEnableAuth').checked = smtpConfig.UseCredentials || false;
                         $('#txtUsername', page).val(smtpConfig.Username || '');
                         $('#txtPassword', page).val(smtpConfig.Password || '');
 
@@ -148,13 +148,13 @@
                             }
 
                             smtpConfig.UserId = userId;
-                            smtpConfig.Enabled = $('#chkEnableSMTP', form).checked;
+                            smtpConfig.Enabled = document.getElementById('chkEnableSMTP').checked;
                             smtpConfig.EmailFrom = $('#txtEmailFrom', form).val();
                             smtpConfig.EmailTo = $('#txtEmailTo', form).val();
                             smtpConfig.Server = $('#txtServer', form).val();
                             smtpConfig.Port = $('#txtPort', form).val();
-                            smtpConfig.useCredentials = $('#chkEnableAuth', form).checked;
-                            smtpConfig.SSL = $('#chkEnableSSL', form).checked;
+                            smtpConfig.useCredentials = document.getElementById('chkEnableAuth').checked;
+                            smtpConfig.SSL = document.getElementById('chkEnableSSL').checked;
                             smtpConfig.Username = $('#txtUsername', form).val();
                             smtpConfig.Password = $('#txtPassword', form).val();
 
