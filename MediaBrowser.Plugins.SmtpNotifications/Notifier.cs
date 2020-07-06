@@ -14,9 +14,9 @@ namespace MediaBrowser.Plugins.SmtpNotifications
 {
     public class Notifier : INotificationService
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<Notifier> _logger;
 
-        public Notifier(ILogger logger)
+        public Notifier(ILogger<Notifier> logger)
         {
             _logger = logger;
         }
