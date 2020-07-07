@@ -19,18 +19,18 @@ namespace MediaBrowser.Plugins.SmtpNotifications.Api
     {
         private readonly IUserManager _userManager;
         private readonly ILogger<ServerApiEndpoints> _logger;
-        private readonly ILogger<Notifier> _notifier_logger;
+        private readonly ILogger<Notifier> _notifierLogger;
 
-        public ServerApiEndpoints(IUserManager userManager, ILogger<ServerApiEndpoints> logger, ILogger<Notifier> notifier_logger)
+        public ServerApiEndpoints(IUserManager userManager, ILogger<ServerApiEndpoints> logger, ILogger<Notifier> notifierLogger)
         {
             _userManager = userManager;
             _logger = logger;
-            _notifier_logger = notifier_logger;
+            _notifierLogger = notifierLogger;
         }
 
         public Task Post(TestNotification request)
         {
-            return new Notifier(_notifier_logger).SendNotification(new UserNotification
+            return new Notifier(_notifierLogger).SendNotification(new UserNotification
             {
                 Date = DateTime.UtcNow,
                 Description = "This is a test notification from Jellyfin Server",
