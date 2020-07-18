@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading;
 using System.Threading.Tasks;
+using Jellyfin.Data.Entities;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Notifications;
 using MediaBrowser.Plugins.SmtpNotifications.Configuration;
@@ -13,9 +14,9 @@ namespace MediaBrowser.Plugins.SmtpNotifications
 {
     public class Notifier : INotificationService
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<Notifier> _logger;
 
-        public Notifier(ILogger logger)
+        public Notifier(ILogger<Notifier> logger)
         {
             _logger = logger;
         }
