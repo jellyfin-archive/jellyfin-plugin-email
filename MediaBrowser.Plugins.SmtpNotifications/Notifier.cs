@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
-using System.Net.Mail;
 using System.Threading;
 using System.Threading.Tasks;
 using Jellyfin.Data.Entities;
-using MediaBrowser.Controller.Entities;
+using MailKit.Net.Smtp;
 using MediaBrowser.Controller.Notifications;
 using MediaBrowser.Plugins.SmtpNotifications.Configuration;
 using Microsoft.Extensions.Logging;
+using MimeKit;
 
 namespace MediaBrowser.Plugins.SmtpNotifications
 {
@@ -38,48 +37,47 @@ namespace MediaBrowser.Plugins.SmtpNotifications
         {
             var options = GetOptions(request.User);
 
-            using (var mail = new MailMessage(options.EmailFrom, options.EmailTo)
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress(options.EmailFrom, options.EmailFrom));
+            message.To.Add(new MailboxAddress(options.EmailTo, options.EmailTo));
+            message.Subject = "Jellyfin: " + request.Name;
+            message.Body = new TextPart("plain")
             {
-                Subject = "Jellyfin: " + request.Name,
-                Body = string.Format("{0}\n\n{1}", request.Name, request.Description)
-            })
-            using (var client = new SmtpClient
+                Text = $"{request.Name}\n\n{request.Description}"
+            };
+            
+            using var client = new SmtpClient();
+            try
             {
-                Host = options.Server,
-                Port = options.Port,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false,
-                Timeout = 20000
-            })
-            {
-                if (options.SSL)
+                await client.ConnectAsync(options.Server, options.Port, options.SSL, cancellationToken).ConfigureAwait(false);
+                if (options.UseCredentials)
                 {
-                    client.EnableSsl = true;
+                    if (!string.IsNullOrEmpty(options.Username)
+                        && !string.IsNullOrEmpty(options.Password))
+                    {
+                        await client.AuthenticateAsync(options.Username, options.Password, cancellationToken).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        _logger.LogError(
+                            "Cannot use credentials for email to {User} because the username or password is missing",
+                            options.EmailTo);
+                    }
                 }
 
-                _logger.LogInformation("Sending email {to} with subject {subject}", options.EmailTo, mail.Subject);
-
-                if (options.UseCredentials
-                    && !string.IsNullOrEmpty(options.Username)
-                    && !string.IsNullOrEmpty(options.Password))
+                _logger.LogInformation("Sending email {to} with subject {subject}", options.EmailTo, message.Subject);
+                await client.SendAsync(message, cancellationToken).ConfigureAwait(false);
+                _logger.LogInformation("Completed sending email {to} with subject {subject}", options.EmailTo, message.Subject);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error sending email");
+            }
+            finally
+            {
+                if (client.IsConnected)
                 {
-                    client.Credentials = new NetworkCredential(options.Username, options.Password);
-                }
-                else
-                {
-                    _logger.LogError(
-                        "Cannot use credentials for email to {User} because the username or password is missing",
-                        options.EmailTo);
-                }
-
-                try
-                {
-                    await client.SendMailAsync(mail).ConfigureAwait(false);
-                    _logger.LogInformation("Completed sending email {to} with subject {subject}", options.EmailTo, mail.Subject);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Error sending email");
+                    await client.DisconnectAsync(true, cancellationToken).ConfigureAwait(false);
                 }
             }
         }
