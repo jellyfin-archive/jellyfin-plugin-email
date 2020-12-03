@@ -1,7 +1,7 @@
 ---
 name: "Email"
 guid: "cfa0f7f4-4155-4d71-849b-d6598dc4c5bb"
-version: "8.0.0.0"
+version: "9.0.0.0"
 targetAbi: "10.7.0.0"
 framework: "net5.0"
 owner: "jellyfin"
