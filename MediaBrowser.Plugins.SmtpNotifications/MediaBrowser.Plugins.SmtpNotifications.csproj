@@ -17,9 +17,6 @@
     <PackageReference Include="Jellyfin.Controller" Version="10.*-*" />
     <PackageReference Include="Jellyfin.Data" Version="10.*-*"/>
     <PackageReference Include="Jellyfin.Controller" Version="10.*-*"/>
-    <PackageReference Include="MailKit" Version="2.10.0" />
-    <PackageReference Include="Jellyfin.Data" Version="10.*-*" />
-    <PackageReference Include="Jellyfin.Controller" Version="10.*-*" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
   </ItemGroup>
 
