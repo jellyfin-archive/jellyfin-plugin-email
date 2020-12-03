@@ -82,100 +82,118 @@
                     Dashboard.showLoadingMsg();
                     ApiClient.getPluginConfiguration(pluginId).then(function (config) {
                         var smtpConfig = config.Options.filter(function (c) {
-                            return userId == c.UserId;
+                            return userId === c.UserId;
                         })[0] || { Enabled: false };
 
-                        document.getElementById('chkEnableSMTP').checked = smtpConfig.Enabled;
-                        $('#txtEmailFrom', page).val(smtpConfig.EmailFrom || '');
-                        $('#txtEmailTo', page).val(smtpConfig.EmailTo || '');
-                        $('#txtServer', page).val(smtpConfig.Server || '');
-                        $('#txtPort', page).val(smtpConfig.Port || '');
-                        document.getElementById('chkEnableSSL').checked = smtpConfig.SSL || false;
-                        document.getElementById('chkEnableAuth').checked = smtpConfig.UseCredentials || false;
-                        $('#txtUsername', page).val(smtpConfig.Username || '');
-                        $('#txtPassword', page).val(smtpConfig.Password || '');
+                        page.querySelector('#chkEnableSMTP').checked = smtpConfig.Enabled; 
+                        page.querySelector('#txtEmailFrom').value = smtpConfig.EmailFrom || '';
+                        page.querySelector('#txtEmailTo').value = smtpConfig.EmailTo || '';
+                        page.querySelector('#txtServer').value = smtpConfig.Server || '';
+                        page.querySelector('#txtPort').value = smtpConfig.Port || ''; 
+                        page.querySelector('#chkEnableSSL').checked = smtpConfig.SSL || false;
+                        page.querySelector('#chkEnableAuth').checked = smtpConfig.UseCredentials || false;
+                        page.querySelector('#txtUsername').value = smtpConfig.Username || '';
+                        page.querySelector('#txtPassword').value = smtpConfig.Password || '';
 
                         Dashboard.hideLoadingMsg();
                     });
                 }
 
-                $('.smtpConfigurationPage').on('pageinit', function (event) {
-                    var page = this;
-                    $('#selectUser', page).on('change', function () {
-                        loadUserConfig(page, this.value);
-                    });
+                document.querySelector('.smtpConfigurationPage')
+                    .addEventListener('pageinit', function(event){
 
-                    $('#testNotification', page).on('click', function (event) {
-                        Dashboard.showLoadingMsg();
-                        var onError = function () {
-                            require(['alert'], function (alert) {
-                                alert("There was an error sending the test email. Please check your email settings and try again.");
+                        var page = this;
+                        page.querySelector('#selectUser')
+                            .addEventListener('change', function () {
+                                loadUserConfig(page, this.value);
+                        });
+
+                        page.querySelector('#testNotification')
+                            .addEventListener('click', function (event) {
+                                Dashboard.showLoadingMsg();
+                                var onError = function () {
+                                    require(['alert'], function (alert) {
+                                        alert("There was an error sending the test email. Please check your email settings and try again.");
+                                    });
+                                };
+    
+                                ApiClient.getPluginConfiguration(pluginId).then(function (config) {
+                                    if (!config.Options.length) {
+                                        Dashboard.hideLoadingMsg();
+                                        require(['alert'], function (alert) {
+                                            alert("Please configure and save at least one email account.");
+                                        });
+                                    }
+    
+                                    config.Options.map(function (c) {
+                                        ApiClient.ajax({
+                                            type: "POST",
+                                            url: ApiClient.getUrl("Notification/SMTP/Test/" + c.UserId)
+                                        }).catch(onError);
+                                    });
+    
+                                    Dashboard.hideLoadingMsg();
+                                }, onError);
+                                
+                                event.preventDefault();
                             });
-                        };
-
-                        ApiClient.getPluginConfiguration(pluginId).then(function (config) {
-                            if (!config.Options.length) {
-                                Dashboard.hideLoadingMsg();
-                                require(['alert'], function (alert) {
-                                    alert("Please configure and save at least one email account.");
+                        
+                        document.querySelector('.smtpConfigurationForm')
+                            addEventListener('submit', function (e) {
+                                console.info(".smtpConfigurationForm.submit");
+                                Dashboard.showLoadingMsg();
+                                var form = this;
+    
+                                ApiClient.getPluginConfiguration(pluginId).then(function (config) {
+                                    var userId = page.querySelector('#selectUser').value;
+                                    var smtpConfig = config.Options.filter(function (c) {
+                                        return userId === c.UserId;
+                                    })[0];
+    
+                                    if (!smtpConfig) {
+                                        smtpConfig = {};
+                                        config.Options.push(smtpConfig);
+                                    }
+    
+                                    smtpConfig.UserId = userId;
+                                    smtpConfig.Enabled = page.querySelector('#chkEnableSMTP').checked;
+                                    smtpConfig.EmailFrom = page.querySelector('#txtEmailFrom').value;
+                                    smtpConfig.EmailTo = page.querySelector('#txtEmailTo').value;
+                                    smtpConfig.Server = page.querySelector('#txtServer').value;
+                                    smtpConfig.Port = page.querySelector('#txtPort').value;
+                                    smtpConfig.useCredentials = page.querySelector('#chkEnableAuth').checked;
+                                    smtpConfig.SSL = page.querySelector('#chkEnableSSL').checked;
+                                    smtpConfig.Username = page.querySelector('#txtUsername').value;
+                                    smtpConfig.Password = page.querySelector('#txtPassword').value;
+    
+                                    ApiClient.updatePluginConfiguration(pluginId, config)
+                                        .then(Dashboard.processPluginConfigurationUpdateResult);
                                 });
-                            }
-
-                            config.Options.map(function (c) {
-                                ApiClient.ajax({
-                                    type: "POST",
-                                    url: ApiClient.getUrl("Notification/SMTP/Test/" + c.UserId)
-                                }).catch(onError);
+    
+                                e.preventDefault();
+                                return false;
                             });
 
-                            Dashboard.hideLoadingMsg();
-                        }, onError);
-                    });
+                    })
 
-                    $('.smtpConfigurationForm', page).on('submit', function (e) {
+                document.querySelector('.smtpConfigurationPage')
+                    .addEventListener('pageshow', function(event){
                         Dashboard.showLoadingMsg();
-                        var form = this;
+                        var page = this;
 
-                        ApiClient.getPluginConfiguration(pluginId).then(function (config) {
-                            var userId = $('#selectUser', form).val();
-                            var smtpConfig = config.Options.filter(function (c) {
-                                return userId == c.UserId;
-                            })[0];
-
-                            if (!smtpConfig) {
-                                smtpConfig = {};
-                                config.Options.push(smtpConfig);
-                            }
-
-                            smtpConfig.UserId = userId;
-                            smtpConfig.Enabled = document.getElementById('chkEnableSMTP').checked;
-                            smtpConfig.EmailFrom = $('#txtEmailFrom', form).val();
-                            smtpConfig.EmailTo = $('#txtEmailTo', form).val();
-                            smtpConfig.Server = $('#txtServer', form).val();
-                            smtpConfig.Port = $('#txtPort', form).val();
-                            smtpConfig.useCredentials = document.getElementById('chkEnableAuth').checked;
-                            smtpConfig.SSL = document.getElementById('chkEnableSSL').checked;
-                            smtpConfig.Username = $('#txtUsername', form).val();
-                            smtpConfig.Password = $('#txtPassword', form).val();
-
-                            ApiClient.updatePluginConfiguration(pluginId, config).then(Dashboard.processPluginConfigurationUpdateResult);
+                        ApiClient.getUsers().then(function (users) {
+                            var selUser = page.querySelector('#selectUser'); 
+                            selUser.innerHTML = users.map(function (user) {
+                                    return '<option value="' + user.Id + '">' + user.Name + '</option>';
+                            });                            
+                            selUser.dispatchEvent(new Event('change', {
+                                bubbles: true,
+                                cancelable: false
+                            }));
                         });
 
-                        return false;
+                        Dashboard.hideLoadingMsg(); 
                     });
-
-                }).on('pageshow', function (event) {
-                    Dashboard.showLoadingMsg();
-                    var page = this;
-
-                    ApiClient.getUsers().then(function (users) {
-                        document.getElementById('selectUser').innerHTML = users.map(function (user) {
-                            return '<option value="' + user.Id + '">' + user.Name + '</option>';
-                        });
-                    });
-
-                    Dashboard.hideLoadingMsg();
-                });
             })();
         </script>
     </div>
