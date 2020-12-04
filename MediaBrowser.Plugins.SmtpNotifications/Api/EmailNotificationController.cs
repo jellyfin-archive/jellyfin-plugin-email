@@ -52,7 +52,7 @@ namespace MediaBrowser.Plugins.SmtpNotifications.Api
                     Level = Model.Notifications.NotificationLevel.Normal,
                     Name = "Test Notification",
                     User = _userManager.GetUserById(userId)
-                }, CancellationToken.None);
+                }, CancellationToken.None).ConfigureAwait(false);
 
             return NoContent();
         }
