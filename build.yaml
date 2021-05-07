@@ -1,6 +1,7 @@
 ---
 name: "Email"
 guid: "cfa0f7f4-4155-4d71-849b-d6598dc4c5bb"
+imageUrl: "https://repo.jellyfin.org/releases/plugin/images/jellyfin-plugin-emailnotifications.png"
 version: "9.0.0.0"
 targetAbi: "10.7.0.0"
 framework: "net5.0"
@@ -9,9 +10,9 @@ overview: "Send SMTP email notifications"
 description: "Send SMTP email notifications"
 category: "Notifications"
 artifacts:
-- "MediaBrowser.Plugins.SmtpNotifications.dll"
-- "BouncyCastle.Crypto.dll"
-- "MailKit.dll"
-- "MimeKit.dll"
-changelog: >
+  - "MediaBrowser.Plugins.SmtpNotifications.dll"
+  - "BouncyCastle.Crypto.dll"
+  - "MailKit.dll"
+  - "MimeKit.dll"
+changelog: |
   changelog
