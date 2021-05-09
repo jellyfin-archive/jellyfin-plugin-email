@@ -7,7 +7,7 @@ on:
 jobs:
   publish_release_draft:
     runs-on: ubuntu-latest
-    if: github.repository == 'jellyfin/jellyfin-plugin-emailnotifications'
+    if: github.repository == 'jellyfin/jellyfin-plugin-email'
     
     steps:
       - name: Get version from GITHUB_REF
