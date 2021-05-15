@@ -7,8 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Configuration\config.html" />
-    <EmbeddedResource Include="Configuration\config.html" />
+    <None Remove="Web\emailnotifications.html" />
+    <None Remove="Web\emailnotifications.js" />
+    <EmbeddedResource Include="Web\emailnotifications.html" />
+    <EmbeddedResource Include="Web\emailnotifications.js" />
   </ItemGroup>
 
   <ItemGroup>

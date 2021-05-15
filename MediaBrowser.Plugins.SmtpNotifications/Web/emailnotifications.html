@@ -1,0 +1,75 @@
+<div id="SmtpConfigurationPage" data-role="page" class="page type-interior pluginConfigurationPage" data-controller="__plugin/emailnotificationsjs">
+    <div data-role="content">
+        <div class="content-primary">
+            <form class="smtpConfigurationForm">
+                <div style="height:0; overflow: hidden;">
+                    <input type="text" name="fakeusernameremembered" tabindex="-1" />
+                    <input type="password" name="fakepasswordremembered" tabindex="-1" />
+                </div>
+
+                <div class="selectContainer">
+                    <select is="emby-select" id="selectUser" label="Configure email notifications for:"></select>
+                </div>
+                <label class="checkboxContainer">
+                    <input is="emby-checkbox" type="checkbox" id="chkEnableSMTP" />
+                    <span>Enable notifications for this user</span>
+                </label>
+                <div class="inputContainer">
+                    <input is="emby-input" type="text" id="txtEmailFrom" name="txtEmailFrom" required="required" label="Email from:" />
+                    <div class="fieldDescription">
+                        Email address used to send the messages. Sending from a free email service such as gmail, hotmail, or yahoo is not recommended. The providers may block repeated outgoing, automated email.
+                    </div>
+                </div>
+                <div class="inputContainer">
+                    <input is="emby-input" type="text" id="txtEmailTo" name="txtEmailTo" required="required" label="Email to:" />
+                    <div class="fieldDescription">
+                        Email address where messages will be sent.
+                    </div>
+                </div>
+                <div class="inputContainer">
+                    <input is="emby-input" type="text" id="txtServer" name="txtServer" required="required" label="SMTP hostname:" />
+                    <div class="fieldDescription">
+                        Hostname for your SMTP Server. Sending from a free email service such as gmail, hotmail, or yahoo is not recommended. The providers may block repeated outgoing, automated email.
+                    </div>
+                </div>
+                <div class="inputContainer">
+                    <input is="emby-input" type="text" id="txtPort" name="txtPort" label="SMTP port:" />
+                    <div class="fieldDescription">
+                        Port for your SMTP Server (Default 25).
+                    </div>
+                </div>
+                <label class="checkboxContainer">
+                    <input is="emby-checkbox" type="checkbox" id="chkEnableSSL" />
+                    <span>Enable SSL / TLS</span>
+                </label>
+                <label class="checkboxContainer">
+                    <input is="emby-checkbox" type="checkbox" id="chkEnableAuth" />
+                    <span>Enable SMTP Authentication</span>
+                </label>
+                <div class="inputContainer">
+                    <input is="emby-input" type="text" id="txtUsername" name="txtUsername" label="SMTP username:" />
+                    <div class="fieldDescription">
+                        Username for your SMTP Server.
+                    </div>
+                </div>
+                <div class="inputContainer">
+                    <input is="emby-input" type="password" id="txtPassword" name="txtPassword" label="SMTP password:" />
+                    <div class="fieldDescription">
+                        Password for your SMTP Server.
+                    </div>
+                </div>
+                <div>
+                    <button is="emby-button" type="button" class="raised button-cancel block" id="testNotification">
+                        <span>Test Notification</span>
+                    </button>
+                </div>
+                <br />
+                <div>
+                    <button is="emby-button" type="submit" class="raised button-submit block">
+                        <span>Save</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

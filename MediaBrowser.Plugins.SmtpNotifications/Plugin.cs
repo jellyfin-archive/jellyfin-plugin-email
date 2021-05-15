@@ -47,8 +47,13 @@ namespace MediaBrowser.Plugins.SmtpNotifications
             {
                 new PluginPageInfo
                 {
-                    Name = Name,
-                    EmbeddedResourcePath = GetType().Namespace + ".Configuration.config.html"
+                    Name = "emailnotifications",
+                    EmbeddedResourcePath = GetType().Namespace + ".Web.emailnotifications.html",
+                },
+                new PluginPageInfo
+                {
+                    Name = "emailnotificationsjs",
+                    EmbeddedResourcePath = GetType().Namespace + ".Web.emailnotifications.js"
                 }
             };
         }
